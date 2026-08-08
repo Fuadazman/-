@@ -19,11 +19,8 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
 
-      - name: Fix ethnum dependency version
-        run: cargo update -p ethnum --precise 1.5.3
-
       - name: Build WASM Binary
-        run: cargo build --target wasm32-unknown-unknown --release
+        run: RUSTFLAGS="-A warnings" cargo build --target wasm32-unknown-unknown --release
 
       - name: Upload WASM Artifact
         uses: actions/upload-artifact@v4
