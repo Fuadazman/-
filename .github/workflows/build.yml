@@ -1,0 +1,31 @@
+name: Build Soroban Contract
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Build WASM Binary
+        run: |
+          cd contracts
+          cargo build --target wasm32-unknown-unknown --release
+
+      - name: Upload WASM Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mithaq-contract-wasm
+          path: contracts/target/wasm32-unknown-unknown/release/*.wasm
