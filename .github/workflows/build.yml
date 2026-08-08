@@ -1,11 +1,10 @@
-name: Build Mithaq Soroban Contracts
+name: Build Soroban Contract
 
 on:
   push:
-    brwasm "main" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:   # يسمح لك بتشغيله يدوياً من GitHub
 
 jobs:
   build:
@@ -16,21 +15,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust Toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         with:
+          toolchain: 1.77.2
           targets: wasm32-unknown-unknown
 
-      - name: Install Soroban CLI
-        run: |
-          cargo install --locked soroban-cli
+      - name: Build WASM Binary
+        run: cargo build --target wasm32-unknown-unknown --release
 
-      - name: Build Contracts
-        run: |
-          cd contracts
-          soroban contract build
-
-      - name: Upload WASM Artifacts
+      - name: Upload WASM Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mithaq-contracts-wasm
-          path: contracts/target/wasm32-unknown-unknown/release/*.wasm
+          name: mithaq-contract-wasm
+          path: target/wasm32-unknown-unknown/release/*.wasm
