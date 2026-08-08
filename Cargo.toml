@@ -1,29 +1,22 @@
-name: Build Soroban Contract
+[package]
+name = "mithaq_contract"
+version = "0.1.0"
+edition = "2021"
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+[lib]
+crate-type = ["cdylib", "rlib"]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+[dependencies]
+soroban-sdk = "20.0.0"
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+[dev-dependencies]
+soroban-sdk = { version = "20.0.0", features = ["testutils"] }
 
-      - name: Install Rust Toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: wasm32-unknown-unknown
-
-      - name: Build WASM Binary
-        run: cargo build --target wasm32-unknown-unknown --release
-
-      - name: Upload WASM Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mithaq-contract-wasm
-          path: target/wasm32-unknown-unknown/release/*.wasm
+[profile.release]
+opt-level = "z"
+overflow-checks = true
+debug = false
+strip = "symbols"
+debug-assertions = false
+panic = "abort"
+codegen-units = 1
