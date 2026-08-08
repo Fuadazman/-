@@ -19,6 +19,9 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
 
+      - name: Update Cargo Lockfile
+        run: cargo update -p ethnum
+
       - name: Build WASM Binary
         run: cargo build --target wasm32-unknown-unknown --release
 
