@@ -20,12 +20,10 @@ jobs:
           targets: wasm32-unknown-unknown
 
       - name: Build WASM Binary
-        run: |
-          cd contracts
-          cargo build --target wasm32-unknown-unknown --release
+        run: cargo build --target wasm32-unknown-unknown --release
 
       - name: Upload WASM Artifact
         uses: actions/upload-artifact@v4
         with:
           name: mithaq-contract-wasm
-          path: contracts/target/wasm32-unknown-unknown/release/*.wasm
+          path: target/wasm32-unknown-unknown/release/*.wasm
